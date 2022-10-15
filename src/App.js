@@ -7,7 +7,7 @@ function App() {
     {
       id: uuid(),
       city: "Moscow",
-      time: new Date().toLocaleTimeString(),
+      zone: 3,
     },
   ];
 

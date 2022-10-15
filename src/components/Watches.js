@@ -5,34 +5,54 @@ import uuid from "react-uuid";
 export default function Watches(props) {
   const [data, setData] = useState(props.data);
 
-  console.log(data);
-
   const handleSubmit = (evt) => {
     evt.preventDefault();
     const data = {
       id: uuid(),
       city: evt.target.city.value,
-      time: evt.target.time.value,
+      time: "",
+      zone: evt.target.zone.value,
     };
     console.log(data);
     handleSave(data);
   };
 
   const handleSave = (value) => {
-    if (value.city && value.time) {
+    if (value.city && value.zone) {
       setData((prevState) => [...prevState, value]);
     }
+    console.log(data);
+  };
+
+  const refreshClock = () => {
+    console.log(data);
+    var utc = new Date();
+    var unix = utc.getTime();
+
+    setData((prevState) =>
+      prevState.map((o) => {
+        let time = unix + (o.zone - 3) * 60 * 60 * 1000;
+        return { ...o, time: new Date(time).toLocaleTimeString() };
+      })
+    );
   };
 
   const listing = data.map((item) => {
     return (
-      <Alert id={item.id}>
+      <Alert key={item.id}>
         <Alert.Heading>{item.time}</Alert.Heading>
         <hr />
         <p className="mb-0">{item.city}</p>
       </Alert>
     );
   });
+
+  useEffect(() => {
+    const timerId = setInterval(refreshClock, 1000);
+    return () => {
+      clearInterval(timerId);
+    };
+  }, []);
 
   return (
     <Container>
@@ -46,7 +66,7 @@ export default function Watches(props) {
           />
         </Form.Group>
 
-        <Form.Group className="mb-3" controlId="time">
+        <Form.Group className="mb-3" controlId="zone">
           <Form.Label>TimeZone</Form.Label>
           <Form.Control
             type={"number"}
@@ -55,7 +75,7 @@ export default function Watches(props) {
             step={1}
             maxLength={2}
             defaultValue={3}
-            placeholder={"Enter Time"}
+            placeholder={"Enter TimeZone"}
           />
         </Form.Group>
         <Button variant="primary" type="submit">
