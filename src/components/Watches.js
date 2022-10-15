@@ -10,7 +10,6 @@ export default function Watches(props) {
     const data = {
       id: uuid(),
       city: evt.target.city.value,
-      time: "",
       zone: evt.target.zone.value,
     };
     console.log(data);
@@ -42,7 +41,10 @@ export default function Watches(props) {
       <Alert key={item.id}>
         <Alert.Heading>{item.time}</Alert.Heading>
         <hr />
-        <p className="mb-0">{item.city}</p>
+        <p className="mb-0">
+          {item.city}{" "}
+          <span onClick={() => handleDelete(item.id)}>(delete)</span>
+        </p>
       </Alert>
     );
   });
@@ -53,6 +55,10 @@ export default function Watches(props) {
       clearInterval(timerId);
     };
   }, []);
+
+  const handleDelete = (id) => {
+    setData((data) => data.filter((o) => o.id !== id));
+  };
 
   return (
     <Container>
