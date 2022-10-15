@@ -24,7 +24,6 @@ export default function Watches(props) {
   };
 
   const refreshClock = () => {
-    console.log(data);
     var utc = new Date();
     var unix = utc.getTime();
 
@@ -42,8 +41,8 @@ export default function Watches(props) {
         <Alert.Heading>{item.time}</Alert.Heading>
         <hr />
         <p className="mb-0">
-          {item.city}{" "}
-          <span onClick={() => handleDelete(item.id)}>(delete)</span>
+          {item.city}
+          <span onClick={() => handleDelete(item.id)}> (delete)</span>
         </p>
       </Alert>
     );
@@ -54,7 +53,7 @@ export default function Watches(props) {
     return () => {
       clearInterval(timerId);
     };
-  }, []);
+  }, [data]);
 
   const handleDelete = (id) => {
     setData((data) => data.filter((o) => o.id !== id));
